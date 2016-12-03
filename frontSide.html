@@ -84,13 +84,8 @@
           $.ajax({
             type: "POST",
             url: "replacehere",
-            data: $(this).serialize(),
-            success: function(data, textStatus, jQxhr){
-              $('#response pre'.html(data));
-            },
-            error: function(jqXhr, textStatus, errorThrown){
-              console.log(errorThrown);
-            }
+            text: "Hello world",
+            success: success
         /*    dataType: 'jsonp'*/
           });
           $('#text3').text('done!');
