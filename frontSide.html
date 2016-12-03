@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> PictoMelody Test </title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"> </script>
+    </head>
+
+    <body>
+        <h1> Test </h1>
+
+        <button id="addPic">Add pic</button>
+        <div id="text1">Wait for it...</div>
+        <script>
+        $("#addPic").click(function() {
+          $('text1').text('loading...');
+          //make an AJAX GET request
+          //see reddit's page for reference: https://github.com/reddit/reddit/wiki/JSON
+          //I am making an AJAX request to REDDIT for results of FOOD
+          $.ajax({
+            type: "GET",
+            data: {
+              q: "food",
+              restrict_sr: "true"
+            },
+            url: "http://www.reddit.com/r/food/top.json",
+            success: function(response) {
+              $('#text1').html('');
+              var children = response.data.children;
+              for(var i=0; i<children.length; i++) {
+                /*$('.text').append('<img src="' + children[i].data.thumbnail + '" />');*/
+                if(children[i].data.thumbnail !== "self" && children[i].data.thumbnail !== "default") {
+                   $('#text1').append('<img src="' + children[i].data.thumbnail + '" />');
+                }
+              }
+            },
+        /*    dataType: 'jsonp'*/
+          });
+
+        });
+        </script>
+
+        <br>
+
+        <button id="morePic">More pic</button>
+        <div id="text2">Wait for it...</div>
+
+        <script>
+        $("#morePic").click(function() {
+          $('#text2').text('loading...');
+          //make an AJAX GET request
+          //see reddit's page for reference: https://github.com/reddit/reddit/wiki/JSON
+          //I am making an AJAX request to REDDIT for results of FOOD
+          $.ajax({
+            type: "GET",
+            url: "http://www.reddit.com/r/food/top.json",
+            success: function(response) {
+              $('#text2').html('');
+              var children = response.data.children;
+              var titleString;
+              for(var i=0; i<children.length; i++) {
+                   if(children[i].data.title.indexOf("undefined") > -1) { ;
+                   } else {
+                   titleString += children[i].data.title + '<br />';
+                 }
+              }
+              $('#text2').html(titleString);
+            },
+        /*    dataType: 'jsonp'*/
+          });
+
+        });
+        </script>
+        <br>
+        <form id="sendForm">
+            <input type="text" id="testData" name="testData" placeholder="Type here" />
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="text3">Wait for it...</div>
+
+        <script>
+        $("#sendData").click(function() {
+          $('#text3').text('loading...');
+          $.ajax({
+            type: "POST",
+            url: "replacehere",
+            data: $(this).serialize(),
+            success: function(data, textStatus, jQxhr){
+              $('#response pre'.html(data));
+            },
+            error: function(jqXhr, textStatus, errorThrown){
+              console.log(errorThrown);
+            }
+        /*    dataType: 'jsonp'*/
+          });
+          $('#text3').text('done!');
+        });
+        </script>
+
+        <br>
+
+        <button id="getData">What?</button>
+        <div id="text4">Wait for it...</div>
+
+        <script>
+        $("#getData").click(function() {
+          $('#text4').text('loading...');
+          $.ajax({
+            type: "GET",
+            url: "replacehere",
+            success: function(response) {
+              $('#text4').html('');
+              var children = response.data.children;
+              var titleString;
+              titleString = children.data;
+              $('#text4').html(titleString);
+            },
+        /*    dataType: 'jsonp'*/
+          });
+
+        });
+        </script>
+
+    </body>
+</html>
