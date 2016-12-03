@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> PictoMelody Test </title>
+        <script type="text/javascript" src="jquery-3.1.1.js"> </script>
+    </head>
+
+    <body>
+        <h1> Test </h1>
+
+        <div id="divTest1"></div>
+        <script type="text/javascript">
+            $(function()
+            {
+                $("#divTest1").text("Hello, world!").css("color","blue");
+            });
+        </script>
+
+        <div id="img1">
+            <img class="smallthumb" src="Horizon.png" alt= "This is a picture.">
+        </div>
+
+        <button id="addPic">Add pic</button>
+        <div id="text1">Wait for it...</div>
+        <script>
+        $("#addPic").click(function() {
+          $('text1').text('loading...');
+          //make an AJAX GET request
+          //see reddit's page for reference: https://github.com/reddit/reddit/wiki/JSON
+          //I am making an AJAX request to REDDIT for results of FOOD
+          $.ajax({
+            type: "GET",
+            data: {
+              q: "food",
+              restrict_sr: "true"
+            },
+            url: "http://www.reddit.com/r/food/top.json",
+            success: function(response) {
+              $('#text1').html('');
+              var children = response.data.children;
+              for(var i=0; i<children.length; i++) {
+                /*$('.text').append('<img src="' + children[i].data.thumbnail + '" />');*/
+                if(children[i].data.thumbnail !== "self" && children[i].data.thumbnail !== "default") {
+                   $('#text1').append('<img src="' + children[i].data.thumbnail + '" />');
+                }
+              }
+            },
+        /*    dataType: 'jsonp'*/
+          });
+
+        });
+        </script>
+
+        <button id="morePic">More pic</button>
+        <div id="text2">Wait for it...</div>
+
+        <script>
+        $("#morePic").click(function() {
+          $('#text2').text('loading...');
+          //make an AJAX GET request
+          //see reddit's page for reference: https://github.com/reddit/reddit/wiki/JSON
+          //I am making an AJAX request to REDDIT for results of FOOD
+          $.ajax({
+            type: "GET",
+            url: "http://www.reddit.com/r/food/top.json",
+            success: function(response) {
+              $('#text2').html('');
+              var children = response.data.children;
+              var titleString;
+              for(var i=0; i<children.length; i++) {
+                   if(children[i].data.title.indexOf("undefined") > -1) { ;
+                   } else {
+                   titleString += children[i].data.title + '<br />';
+                 }
+              }
+              $('#text2').html(titleString);
+            },
+        /*    dataType: 'jsonp'*/
+          });
+
+        });
+        </script>
+
+    </body>
+</html>
